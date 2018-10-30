@@ -12,8 +12,8 @@
 # ------------------------------------------------------------------------------
 aliases:
   j1app: jekyllone/j1app:latest
-gems:
-  all:
+#gems:
+#  all:
 #   - builder
 #   - bump
 #   - eventmachine
@@ -21,23 +21,23 @@ gems:
 #   - fast_blank
 #   - ffi
 #   - htmlbeautifier
-    - html-proofer
+#    - html-proofer
 #   - http_parser.rb
-    - jekyll-reload
-    - jekyll-mentions
-    - jekyll-coffeescript
-    - jekyll-sass-converter
-    - jekyll-commonmark
-    - jekyll-compose
-    - jekyll-assets
-    - kramdown
+#    - jekyll-reload
+#    - jekyll-mentions
+#    - jekyll-coffeescript
+#    - jekyll-sass-converter
+#    - jekyll-commonmark
+#    - jekyll-compose
+#    - jekyll-assets
+#    - kramdown
 #   - middleman-core
 #   - nokogiri
 #   - nokogiri-pretty
 #   - puma
 #   - pygments.rb
 #   - slim
-    - thread_safe
+#    - thread_safe
 #   - tzinfo
 #   - rack
 #   - rack-cors
@@ -54,13 +54,13 @@ gems:
 #   - omniauth-facebook
 #   - omniauth-github
 #   - omniauth-twitter
-  group:
-    relative: &relative
-      - asciidoctor
-      - jekyll-feed
-      - jekyll-gist
-      - jekyll-paginate-v2
-      - jekyll-redirect-from
-      - jekyll-sitemap
-    stable:
-      - *relative
+#  group:
+#    relative: &relative
+#      - asciidoctor
+#      - jekyll-feed
+#      - jekyll-gist
+#      - jekyll-paginate-v2
+#      - jekyll-redirect-from
+#      - jekyll-sitemap
+#    stable:
+#      - *relative
