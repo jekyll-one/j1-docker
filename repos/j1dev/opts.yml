@@ -1,0 +1,67 @@
+# ------------------------------------------------------------------------------
+# ~/repos/dev/opts.yml
+# Defines all (image-level) data needed for image creation
+#
+# Product/Info:
+# https://jekyll-one.com
+#
+# Copyright (C) 2018 Juergen Adams
+#
+# J1 Template is licensed under the MIT License.
+# See: https://github.com/jekyll-one/j1_template_mde/blob/master/LICENSE
+# ------------------------------------------------------------------------------
+aliases:
+  j1app: jekyllone/j1app:latest
+gems:
+  all:
+    - builder
+    - bump
+    - eventmachine
+    - execjs
+    - fast_blank
+    - ffi
+    - htmlbeautifier
+    - html-proofer
+    - http_parser.rb
+    - jekyll-reload
+    - jekyll-mentions
+    - jekyll-coffeescript
+    - jekyll-sass-converter
+    - jekyll-commonmark
+    - jekyll-compose
+    - jekyll-assets
+    - kramdown
+    - middleman-core
+    - nokogiri
+    - nokogiri-pretty
+    - puma
+    - pygments.rb
+    - slim
+    - thread_safe
+    - tzinfo
+    - rack
+    - rack-cors
+    - rack-protection
+    - rack-ssl-enforcer
+    - rake
+    - RedCloth
+    - sass
+    - scss_lint
+    - sinatra
+    - sinatra-contrib
+    - sinatra-index
+    - omniauth
+    - omniauth-facebook
+    - omniauth-github
+    - omniauth-twitter
+  group:
+    relative: &relative
+      - asciidoctor
+      - jekyll-feed
+      - jekyll-gist
+      - jekyll-paginate-v2
+      - jekyll-redirect-from
+      - jekyll-sitemap
+    stable:
+      - *relative
+
