@@ -1,8 +1,8 @@
-- [ ] I have added or updated the specs.
-- [ ] I have verified that the specs pass on my computer.
-- [ ] I have not attempted to bump, or alter versions.
-- [ ] This is a documentation change.
-- [ ] This is a source change.
+-   [ ] I have added or updated the specs.
+-   [ ] I have verified that the specs pass on my computer.
+-   [ ] I have not attempted to bump, or alter versions.
+-   [ ] This is a documentation change.
+-   [ ] This is a source change.
 
 ## Description
 

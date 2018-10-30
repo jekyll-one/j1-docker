@@ -5,13 +5,13 @@
   release could severely impact people.
 -->
 
-- [ ] I tried updating to the latest version.
-  - [ ] I can't, there is an issue.
-- [ ] I Am on Windows
-  - [ ] Ubuntu Bash on Windows
-  - [ ] Fedora Bash on Windows
-- [ ] I Am on Linux
-- [ ] I Am on macOS
+-   [ ] I tried updating to the latest version.
+-   [ ] I can't, there is an issue.
+-   [ ] I Am on Windows
+-   [ ] Ubuntu Bash on Windows
+-   [ ] Fedora Bash on Windows
+-   [ ] I Am on Linux
+-   [ ] I Am on macOS
 
 ## Description
 
@@ -24,9 +24,9 @@
 
 ## Steps
 
-- Step 1
-- Step 2
-- Step 3
+-   Step 1
+-   Step 2
+-   Step 3
 
 ## Output
 

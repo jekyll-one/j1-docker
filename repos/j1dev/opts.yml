@@ -14,15 +14,15 @@ aliases:
   j1app: jekyllone/j1app:latest
 gems:
   all:
-    - builder
-    - bump
-    - eventmachine
-    - execjs
-    - fast_blank
-    - ffi
-    - htmlbeautifier
+#   - builder
+#   - bump
+#   - eventmachine
+#   - execjs
+#   - fast_blank
+#   - ffi
+#   - htmlbeautifier
     - html-proofer
-    - http_parser.rb
+#   - http_parser.rb
     - jekyll-reload
     - jekyll-mentions
     - jekyll-coffeescript
@@ -31,29 +31,29 @@ gems:
     - jekyll-compose
     - jekyll-assets
     - kramdown
-    - middleman-core
-    - nokogiri
-    - nokogiri-pretty
-    - puma
-    - pygments.rb
-    - slim
+#   - middleman-core
+#   - nokogiri
+#   - nokogiri-pretty
+#   - puma
+#   - pygments.rb
+#   - slim
     - thread_safe
-    - tzinfo
-    - rack
-    - rack-cors
-    - rack-protection
-    - rack-ssl-enforcer
-    - rake
-    - RedCloth
-    - sass
-    - scss_lint
-    - sinatra
-    - sinatra-contrib
-    - sinatra-index
-    - omniauth
-    - omniauth-facebook
-    - omniauth-github
-    - omniauth-twitter
+#   - tzinfo
+#   - rack
+#   - rack-cors
+#   - rack-protection
+#   - rack-ssl-enforcer
+#   - rake
+#   - RedCloth
+#   - sass
+#   - scss_lint
+#   - sinatra
+#   - sinatra-contrib
+#   - sinatra-index
+#   - omniauth
+#   - omniauth-facebook
+#   - omniauth-github
+#   - omniauth-twitter
   group:
     relative: &relative
       - asciidoctor
@@ -64,4 +64,3 @@ gems:
       - jekyll-sitemap
     stable:
       - *relative
-
