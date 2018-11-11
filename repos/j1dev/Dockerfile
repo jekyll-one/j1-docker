@@ -148,6 +148,8 @@ RUN gem install jekyll -v<%= @meta.release?? \
 # ------------------------------------------------------------------------------
 RUN addgroup -Sg 1000 jekyll
 RUN adduser  -Su 1000 -G jekyll jekyll
+RUN addgroup -Sg 5555 cifs
+RUN usermod  -aG cifs jekyll
 
 # PREPARE - CREATE Application folders
 # ------------------------------------------------------------------------------
@@ -173,4 +175,3 @@ VOLUME  /srv/jekyll
 ONBUILD RUN virtualenv /env && /env/bin/pip install -r /usr/python/requirements.txt
 EXPOSE 35729
 EXPOSE 40000
-
