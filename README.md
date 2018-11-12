@@ -122,3 +122,31 @@ docker run --rm \
   --volume=$PWD:/srv/jekyll \
   -it jekyllone/j1dev:3.8 bash
 ```
+=======
+
+This will print you all untagged images
+
+```sh
+docker images ls -a | grep "^<none>" | awk "{print $3}"
+```
+
+This filtering also works for dangling volumes. To remove all those images
+run:
+
+```sh
+docker rm $(docker images ls -a | grep "^<none>" | awk "{print $3}")
+```
+
+
+## Explore an Image
+
+To have a look inside an image, run a container using a bash (shell):
+
+
+```sh
+docker run --rm \
+  --name j1_develop \
+  --hostname j1_develop \
+  --volume=$PWD:/srv/jekyll \
+  -it jekyllone/j1dev:3.8 bash
+```
