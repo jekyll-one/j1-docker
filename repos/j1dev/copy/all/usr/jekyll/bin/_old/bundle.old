@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 # ------------------------------------------------------------------------------
 # ~/repos/dev/helper/all/usr/jekyll/bin/bundle
 # J1 Docker - Helper script for the RubyGem bundler
@@ -15,9 +14,9 @@
 # NOTE:
 #
 # ------------------------------------------------------------------------------
-set -e
 
 [ "$DEBUG" = "true" ] && set -x
+set -e
 
 # ------------------------------------------------------------------------------
 # The "bundle" helper is NOT needed to run if NO Gemfile
@@ -36,9 +35,9 @@ fi
 # what we want, or if inside of `jekyll new` because
 # Jekyll will simply call `bundle`
 # ------------------------------------------------------------------------------
-if [ "$(id -u)" != "0" ]; then
-   exec $GEM_BIN/bundle "$@"
-fi
+# if [ "$(id -u)" != "0" ]; then
+#    exec $GEM_BIN/bundle "$@"
+# fi
 
 # Make sure that proper permissions are set on th bundle (files)
 # ------------------------------------------------------------------------------
@@ -47,6 +46,7 @@ if [ "$1" = "install" ] || [ "$1" = "clean" ] || [ "$1" = "update" ]; then
     chown -R jekyll:jekyll $BUNDLE_HOME
   fi
 fi
+
 
 # ------------------------------------------------------------------------------
 exe=$GEM_BIN/bundle

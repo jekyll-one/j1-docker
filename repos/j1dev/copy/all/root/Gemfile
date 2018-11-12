@@ -1,0 +1,16 @@
+source "https://rubygems.org"
+ruby RUBY_VERSION
+
+# --------------------------------------------------------------------
+# J1 Template is using Jekyll v3.7 and above
+#
+#   NOTE: Jekyll >= v3.5 is using Liquid V4 for templating.
+#         Make sure that all liquid|Template code is of version 4.x
+#
+gem 'jekyll', '~> 3.8.4'
+gem 'liquid', '~> 4.0'
+
+# Default theme (J1 Template Material Design Elements) based on
+# Bootstrap v4.1.1 and MD for Bootstrap v0.5.10.
+#
+gem 'j1_template_mde', '~> 2018.4.0'

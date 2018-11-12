@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+
 # ------------------------------------------------------------------------------
 # ~/repos/dev/helper/all/usr/jekyll/bin/entrypoint
 # J1 Docker - Helper script for Docker. Defines the entrypoint
@@ -14,9 +15,9 @@
 # NOTE:
 #
 # ------------------------------------------------------------------------------
+set -e
 
 [ "$DEBUG" = "true" ] && set -x
-set -e
 
 # ------------------------------------------------------------------------------
 : ${JEKYLL_UID:=$(id -u jekyll)}
@@ -45,4 +46,5 @@ if [ "$JEKYLL_UID" != "0" ] && [ "$JEKYLL_UID" != "$(id -u jekyll)" ]; then
 fi
 
 # ------------------------------------------------------------------------------
+#echo "entrypoint args: $@"
 exec "$@"

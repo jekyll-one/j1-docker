@@ -54,8 +54,8 @@ docker run --rm \
 
 ### LiveReload
 
-This image supports [jekyll-reload](https://rubygems.org/gems/jekyll-reload),
-all you need do is to [configure it according to your needs](http://www.rubydoc.info/gems/jekyll-reload/).
+J1 images support [jekyll-reload](https://rubygems.org/gems/jekyll-reload).
+All you need do is to [configure it according to your needs](http://www.rubydoc.info/gems/jekyll-reload/).
 
 ```sh
 export JEKYLL_VERSION=3.8
@@ -66,17 +66,59 @@ docker run --rm \
   jekyll serve --incremental --livereload
 ```
 
-## Building Our Images
+## Build Images
 
-You can build our images or any specific tag of an image with
-`bundle exec docker-template build` or `bundle exec docker-template build repo:tag`,
-yes it's that simple to build our images; even if it looks complicated
-it's not.
+You can build images or any specific tag of an image running
 
-## Contributing
+```sh
+bundle exec docker-template build
+```
 
-*   Fork the current repo; `bundle install`
-*   `opts.yml` holds most of the versions, and gems.
-*   Test your image manually `script/debug` will help you with that.
-*   Ensure that your intended changes work as they're supposed to.
-*   Ship a pull request if you wish to have it reviewed!
+or
+
+```sh
+bundle exec docker-template build repo:tag
+```
+
+It's simple like that to build images!
+
+Example:
+
+```sh
+bundle exec docker-template build j1dev:3.8 --no-push
+```
+
+### Reset a Build
+
+```sh
+bundle exec docker-template clean
+```
+
+### Remove <none> images after Build
+
+This will print you all untagged images
+
+```sh
+docker images ls -a | grep "^<none>" | awk "{print $3}"
+```
+
+This filtering also works for dangling volumes. To remove all those images
+run:
+
+```sh
+docker rm $(docker images ls -a | grep "^<none>" | awk "{print $3}")
+```
+
+
+## Explore an Image
+
+To have a look inside an image, run a container using a bash (shell):
+
+
+```sh
+docker run --rm \
+  --name j1_develop \
+  --hostname j1_develop \
+  --volume=$PWD:/srv/jekyll \
+  -it jekyllone/j1dev:3.8 bash
+```

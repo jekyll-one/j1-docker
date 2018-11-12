@@ -12,3 +12,6 @@
 # ------------------------------------------------------------------------------
 aliases:
   j1app: jekyllone/j1app:latest
+gems:
+  all:
+    - j1_template_mde

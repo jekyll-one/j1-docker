@@ -83,8 +83,6 @@ RUN apk --no-cache add \
   readline-dev \
   libffi-dev \
   yaml-dev \
-  zlib-dev \
-  libffi-dev \
   cmake
 
 # MAIN libraries

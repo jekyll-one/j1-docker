@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
+
 # ------------------------------------------------------------------------------
 # j1fsp.sh
 #
 # DESCRIPTION
 #   Perform r/w performance tests for filesystems used by an application
-#   like J1 Template  
+#   like J1 Template
 #
 # ------------------------------------------------------------------------------
 # Version:          0.0.1
@@ -13,7 +14,7 @@
 # Last modified:
 # ------------------------------------------------------------------------------
 # NOTE:
-# 
+#
 # ------------------------------------------------------------------------------
 # TODO:
 #
@@ -154,14 +155,14 @@ cat <<EOF
 
       -h            Prints this help
       -c <num>      Number of test files, default: 10
-      -m <mode>     FS buffer cache usage [sync|direct], default: sync 
+      -m <mode>     FS buffer cache usage [sync|direct], default: sync
       -s <size>     Size of test files, default: 1M
       -S            Measure CPU|Memory speeds, default: false
 
   Example/s:
 
   Creates read|write test for 10 files if 1M of size, buffer cache used
-    $SCRIPT_NAME 
+    $SCRIPT_NAME
 
   Creates read|write test for 50 files if 1M of size, no buffer cache used
     $SCRIPT_NAME -c 50 -m direct
@@ -180,7 +181,7 @@ EOF
 # ------------------------------------------------------------------------------
 #    win_to_unix_path ()
 #
-#    DESCRIPTION        used to convert e.g. "C:\Program Files\Docker Toolbox" 
+#    DESCRIPTION        used to convert e.g. "C:\Program Files\Docker Toolbox"
 #                       to "/c/Program Files/Docker Toolbox"
 #    SYNOPSIS           win_to_unix_path WINDOWS_PATH
 #
@@ -246,11 +247,11 @@ dd_writes=$(echo ${dd_writes} | ${SED_CMD} 's/MB\/s//g' | tr -s ' ')
 # calculate the total throughput (float)
 tot=0
 for i in ${dd_writes[@]}; do
-  tot=$(echo ${tot} ${i} | awk '{print $1 + $2}')  
+  tot=$(echo ${tot} ${i} | awk '{print $1 + $2}')
 done
 dd_write=$(echo ${tot} ${COUNT} | awk '{print $1 / $2}')
 
-# trim the precision (float) 
+# trim the precision (float)
 dd_write=$(echo ${dd_write} | awk '{printf "%.2f", $1}')
 
 # calculate amount of data processed
@@ -264,8 +265,8 @@ FILES=$(find ${TEST_FILE_FOLDER}/ -type f -print)
 
 # read files and create results array dd_reads
 for f in $FILES; do
-  dd_reads+=$(dd if=${f} of=/dev/null iflag=${DD_FLAG} 2>&1 | grep -v records | ${SED_CMD} 's/.* s,//')  
-  #dd_reads+=$(dd if=${f} of=/dev/null 2>&1 | grep -v records | ${SED_CMD} 's/.* s,//')  
+  dd_reads+=$(dd if=${f} of=/dev/null iflag=${DD_FLAG} 2>&1 | grep -v records | ${SED_CMD} 's/.* s,//')
+  #dd_reads+=$(dd if=${f} of=/dev/null 2>&1 | grep -v records | ${SED_CMD} 's/.* s,//')
 done
 
 # remove unit string from all measures and replace multiple spaces
@@ -274,11 +275,11 @@ dd_reads=$(echo ${dd_reads} | ${SED_CMD} 's/MB\/s//g' | tr -s ' ')
 # calculate the total throughput (float)
 tot=0
 for i in ${dd_reads[@]}; do
-  tot=$(echo ${tot} ${i} | awk '{print $1 + $2}')  
+  tot=$(echo ${tot} ${i} | awk '{print $1 + $2}')
 done
 dd_read=$(echo ${tot} ${COUNT} | awk '{print $1 / $2}')
 
-# trim the precision (float) 
+# trim the precision (float)
 dd_read=$(echo ${dd_read} | awk '{printf "%.2f", $1}')
 
 dd_ratio=$(echo ${dd_read} ${dd_write} | awk '{print $1 / $2}')
@@ -294,7 +295,7 @@ echo "${SCRIPT_NAME} END:   ${DATE} ${TIME}"
 echo "${SCRIPT_NAME} TIME:  $elapsed"
 echo
 if [[ ${STATS} == "true" ]]; then
-echo "${SCRIPT_NAME} CPU:  ${CPU_SPEED}" 
+echo "${SCRIPT_NAME} CPU:  ${CPU_SPEED}"
 echo "${SCRIPT_NAME} MEM:  ${MEM_SPEED}"
 echo
 fi

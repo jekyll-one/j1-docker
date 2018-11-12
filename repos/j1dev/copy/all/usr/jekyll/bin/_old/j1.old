@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 # ------------------------------------------------------------------------------
 # ~/repos/dev/helper/all/usr/jekyll/bin/j1
 # J1 Docker - Helper script that defines the main control
@@ -16,24 +15,29 @@
 # NOTE:
 #
 # ------------------------------------------------------------------------------
-set -e
 
 [ "$DEBUG" = "true" ] && set -x
+set -e
 
-args=($(default-args $@))
+args=$(default-args $@)
 cmd_args=("${args[@]:1}")
 
-[ "$DEBUG" = "true" ] && echo "j1 cmd_args:   ${cmd_args[@]}"
-[ "$DEBUG" = "true" ] && echo "j1 default-args: ${args[@]}"
+
+# extract command arguments from $@
+# for (( i=0; i<=($# +1); i++ )); do
+#   shift
+#   cmd_args+=" $1"
+# done
+
 
 # The assumption here is that if we aren't ID 0 then
 # something we wrapped, recalled us, so we need to ship
 # them to the right spot.  This can happen in one
 # scenario (when you do `jekyll new`.)
 # ------------------------------------------------------------------------------
-#if [ "$(id -u)" != "0" ]; then
-#  exec $BUNDLE_BIN/jekyll "$@"
-#fi
+# if [ "$(id -u)" != "0" ]; then
+#   exec $BUNDLE_BIN/jekyll "$@"
+# fi
 
 # ------------------------------------------------------------------------------
 [ -d ".cache" ] && chown -R jekyll:jekyll .cache
@@ -49,24 +53,23 @@ if [ -f "Gemfile" ] && connected; then
 fi
 
 echo "$(ruby --version)"
+
 sup_args=""
 
 if [[ ${args[@]} =~ generate ]]; then
-  if [[ ${args[@]} =~ skip-bundle ]]; then
-    exe="/usr/local/bundle/bin/j1 ${args[@]}"
-  else
-    exe="/usr/local/bundle/bin/j1 ${args[@]} --skip-bundle"
-  fi
+  exe="/usr/local/bundle/bin/j1 ${cmd_args}"
 elif [[ ${args[@]} =~ fsp ]]; then
-  exe="/usr/local/bin/j1fsp.sh ${cmd_args[@]}"
+  exe="/usr/local/bin/j1fsp.sh ${cmd_args}"
 else
   exe=$BUNDLE_BIN/jekyll
 fi
 
-[ "$DEBUG" = "true" ] && echo "exe: ${exe}"
-
 if [[ ${exe} =~ jekyll ]]; then
+  [ "$JEKYLL_DOCKER_TAG" = "pages" ] && sup_args="-r github-pages"
   [ -x "$exe" ] && exec su-exec jekyll bundle exec ruby $sup_args $exe $args
-else
+  su-exec jekyll ruby $sup_args $GEM_BIN/jekyll $args
+elif [[ ${exe} =~ fsp ]]; then
+  su-exec jekyll ${exe}
+elif [[ ${exe} =~ generate ]]; then
   ${exe}
 fi
