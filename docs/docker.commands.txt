@@ -1,0 +1,208 @@
+docker-machine create -d virtualbox --virtualbox-cpu-count=2 --virtualbox-memory=2048 --virtualbox-disk-size=30960 default
+
+
+# Docker Image jekyll/jekyll
+--------------------------------------------------------------------------------
+
+docker run --rm \
+  --volume=$PWD:/srv/jekyll \
+  -p 35729:35729 -p 4000:4000 \
+  -it jekyll/jekyll:$JEKYLL_VERSION \
+  jekyll serve --incremental --livereload
+
+
+# Docker Image jekyllone/j1dev:latest
+--------------------------------------------------------------------------------
+
+docker run --rm \
+  --volume=$PWD:/srv/jekyll \
+  -p 35729:35729 -p 40000:40000 \
+  -it jekyllone/j1dev:latest \
+  j1 serve --incremental --livereload
+
+$ docker container ls
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                                              NAMES
+725e3a04ba74        jekyllone/j1dev:latest   "/usr/jekyll/bin/ent…"   3 minutes ago       Up 3 minutes        0.0.0.0:35729->35729/tcp, 0.0.0.0:40000->40000/tcp   silly_bell
+
+
+$ docker commit CONTAINER_NAME jekyllone/j1:latest
+
+$ docker-machine ls
+NAME      ACTIVE   DRIVER       STATE     URL                         SWARM   DOCKER        ERRORS
+default   *        virtualbox   Running   tcp://192.168.99.100:2376           v18.06.1-ce
+myvm1     -        virtualbox   Stopped                                       Unknown
+myvm2     -        virtualbox   Stopped                                       Unknown
+
+$ docker container ls
+CONTAINER ID        IMAGE                 COMMAND                  CREATED             STATUS              PORTS                                              NAMES
+b86bef54ad8e        j1/j1-docker:inital   "/usr/jekyll/bin/ent…"   About an hour ago   Up About an hour    0.0.0.0:4000->4000/tcp, 0.0.0.0:35729->35729/tcp   xenodochial_tereshkova
+
+$ docker image ls
+REPOSITORY            TAG                 IMAGE ID            CREATED             SIZE
+jekyllone/j1        latest              8219f571b304        6 seconds ago       656MB
+jekyllone/j1dev     3.8.4               b948b8721692        11 minutes ago      374MB
+jekyllone/j1dev     latest              b948b8721692        11 minutes ago      374MB
+
+docker run --rm \
+  --volume=$PWD:/srv/jekyll \
+  -p 35729:35729 -p 40000:40000 \
+  -it jekyllone/j1dev:latest \
+  j1 serve --incremental --livereload
+
+
+docker run --rm \
+  --name starter \
+  --hostname starter_web \
+  --volume=$PWD:/srv/jekyll \
+  -p 35729:35729 -p 40000:40000 \
+  -it jekyllone/j1dev:latest \
+  j1 serve --incremental --livereload
+
+
+# Full blown image j1:latest
+--------------------------------------------------------------------------------
+
+docker run --rm \
+  --volume=$PWD:/srv/jekyll \
+  -p 35729:35729 -p 40000:40000 \
+  -it jekyllone/j1:latest \
+  j1 serve --incremental --livereload
+
+docker run --rm \
+  --volume=$PWD:/srv/jekyll \
+  -p 35729:35729 -p 4000:4000 \
+  -it jekyllone/j1:latest \
+  j1 serve --incremental --livereload
+
+docker push jekyllone/j1:latest
+
+
+# Add your remote Docker daemon (running on my.host.com) to Docker Machine :
+--------------------------------------------------------------------------------
+
+docker-machine create --driver generic \
+ --generic-ip-address vubuntu \
+ --generic-ssh-user jadams \
+ vubuntu
+
+----
+
+docker-machine create --driver generic \
+ --generic-ip-address ubuntu \
+ --generic-ssh-user jadams \
+ ubuntu
+
+----
+
+docker-machine create --driver generic \
+ --generic-ip-address vcentos \
+ --generic-ssh-user jadams \
+ vcentos
+
+docker-machine env vcentos 
+eval $(docker-machine env vcentos)
+
+docker-machine env vubuntu 
+eval $(docker-machine env vubuntu)
+
+docker-machine env default 
+eval $(docker-machine env default)
+
+docker exec -it awesome_williams bash
+
+
+sudo docker service list
+sudo docker ps
+sudo service docker restart
+
+\\?\c:\Users
+c/Users
+
+Change mount point of virtualbox shared folder
+--------------------------------------------------------------------------------
+See: https://askubuntu.com/questions/563031/change-mount-point-of-virtualbox-shared-folder
+
+List
+"C:\Program Files\Oracle\VirtualBox\VBoxManage" guestproperty enumerate "default" | findstr -i SharedFolders
+"C:\Program Files\Oracle\VirtualBox\VBoxManage" guestproperty enumerate "ubuntu-server" | findstr -i SharedFolders
+Set
+"C:\Program Files\Oracle\VirtualBox\VBoxManage" guestproperty set "ubuntu-server" /VirtualBox/GuestAdd/SharedFolders/MountPrefix /
+"C:\Program Files\Oracle\VirtualBox\VBoxManage" guestproperty set "ubuntu-server" /VirtualBox/GuestAdd/SharedFolders/MountDir /
+
+
+Mount shared folders on Linux provided on Windows
+--------------------------------------------------------------------------------
+
+sudo apt-get install cifs-utils
+
+sudo mount.cifs //win10pc/Public /home/jadams/mnt/public -o user=jadams
+sudo mount -t cifs -o username=${USER},password=${PASSWORD},uid=$(id -u),gid=$(id -g) //win10pc/Public /home/jadams/mnt/public
+
+umount /home/jadams/mnt/public
+
+
+dd if=/dev/zero of=/home/jadams/mnt/public/transfer_test bs=10M count=500
+--
+
+dd if=/dev/zero of=/home/jadams/tmp/transfer_test bs=10M count=500
+--
+500+0 records in
+500+0 records out
+5242880000 bytes (5.2 GB, 4.9 GiB) copied, 20.8612 s, 251 MB/
+
+
+== Run bash in j1 images
+
+Bla Bla
+
+=== Run a container
+
+docker run --rm \
+  --name starter \
+  --hostname starter_web \
+  --volume=$PWD:/srv/jekyll \
+  -it jekyllone/starter_web:latest bash
+
+=== Connect a running container
+
+docker exec \
+  -it jekyllone/starter_web:latest bash
+
+
+
+
+docker run --rm \
+  --name starter \
+  --hostname starter_web \
+  --volume=$PWD:/srv/jekyll \
+  -p 35729:35729 -p 40000:40000 \
+  -it jekyllone/starter_web:latest \
+  j1 serve --incremental --livereload
+
+
+== Create a J1 Web from a container
+
+docker run --rm \
+  --user $(id -u $(whoami)) \
+  --volume=$PWD:/srv/jekyll \
+  -i jekyllone/starter_web \
+  j1 generate starter
+
+
+== Run a perf test on a container
+
+docker run --rm \
+  --volume=$PWD:/srv/jekyll \
+  -i jekyllone/starter_web \
+  j1 fsp -c 20 
+
+--
+/usr/gem/gems/j1_template_mde-2018.4.2/exe/j1 generate starter
+/usr/local/bundle/bin/j1 generate starter
+
+== Run bash in DEBUG mode
+
+docker run --rm \
+  --env DEBUG=true \
+  --volume=$PWD:/srv/jekyll 
+  ...
