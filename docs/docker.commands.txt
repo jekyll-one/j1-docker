@@ -1,6 +1,28 @@
 docker-machine create -d virtualbox --virtualbox-cpu-count=2 --virtualbox-memory=2048 --virtualbox-disk-size=30960 default
 
 
+
+== Login into Docker (Hub)
+
+docker login
+
+Authenticating with existing credentials...
+WARNING! Your password will be stored unencrypted in /home/jadams/.docker/config.json.
+Configure a credential helper to remove this warning. See
+https://docs.docker.com/engine/reference/commandline/login/#credentials-store
+
+
+== Run a Site
+
+=== j1
+
+docker run --rm \
+  --volume=$PWD:/srv/jekyll \
+  -p 35729:35729 -p 40000:40000 \
+  -it jekyllone/j1:latest \
+  j1 serve --incremental --livereload
+
+
 # Docker Image jekyll/jekyll
 --------------------------------------------------------------------------------
 
@@ -8,7 +30,7 @@ docker run --rm \
   --volume=$PWD:/srv/jekyll \
   -p 35729:35729 -p 4000:4000 \
   -it jekyll/jekyll:$JEKYLL_VERSION \
-  jekyll serve --incremental --livereload
+  j1 serve --incremental --livereload
 
 
 # Docker Image jekyllone/j1dev:latest
@@ -99,13 +121,13 @@ docker-machine create --driver generic \
  --generic-ssh-user jadams \
  vcentos
 
-docker-machine env vcentos 
+docker-machine env vcentos
 eval $(docker-machine env vcentos)
 
-docker-machine env vubuntu 
+docker-machine env vubuntu
 eval $(docker-machine env vubuntu)
 
-docker-machine env default 
+docker-machine env default
 eval $(docker-machine env default)
 
 docker exec -it awesome_williams bash
@@ -157,18 +179,26 @@ Bla Bla
 
 === Run a container
 
+==== Starter WEB
+
+
+docker run --rm \
+  --name starter \
+  --hostname starter_web \
+  --volume=$PWD:/srv/jekyll \
+  -it jekyllone/j1dev:latest bash
+
 docker run --rm \
   --name starter \
   --hostname starter_web \
   --volume=$PWD:/srv/jekyll \
   -it jekyllone/starter_web:latest bash
 
+
 === Connect a running container
 
 docker exec \
   -it jekyllone/starter_web:latest bash
-
-
 
 
 docker run --rm \
@@ -185,24 +215,44 @@ docker run --rm \
 docker run --rm \
   --user $(id -u $(whoami)) \
   --volume=$PWD:/srv/jekyll \
-  -i jekyllone/starter_web \
-  j1 generate starter
+  -i jekyllone/j1 \
+  j1 generate starter --skip-bundle
 
 
 == Run a perf test on a container
 
 docker run --rm \
   --volume=$PWD:/srv/jekyll \
+  -i jekyllone/j1 \
+  j1 fsp -c 20
+
+
+docker run --rm \
+  --volume=$PWD:/srv/jekyll \
   -i jekyllone/starter_web \
-  j1 fsp -c 20 
+  j1 fsp -c 20
 
 --
 /usr/gem/gems/j1_template_mde-2018.4.2/exe/j1 generate starter
 /usr/local/bundle/bin/j1 generate starter
 
+
 == Run bash in DEBUG mode
 
 docker run --rm \
   --env DEBUG=true \
-  --volume=$PWD:/srv/jekyll 
+  --volume=$PWD:/srv/jekyll
   ...
+
+== Docker clean images and contains
+
+docker image ls -a | grep "^<none>"
+docker container ls -a | grep "^<none>"
+
+docker image ls -a | grep "^<none>" | awk "{print $3}"
+docker container ls -a | grep "^<none>" | awk "{print $3}"
+
+docker image rm --force $(docker image ls -a | grep "^<none>" | awk "{print $3}")
+
+docker container rm --force $(docker container ls -a | grep "^<none>" | awk "{print $3}")
+docker image rm --force $(docker image ls -a | grep "^jekyllone/j1dev" | awk "{print $3}")
