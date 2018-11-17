@@ -14,4 +14,11 @@ aliases:
   j1app: jekyllone/j1app:latest
 gems:
   all:
+    - forwardable-extended
+    - mercenary
+    - pathutil
+    - fileutils
+    - logger
+    - colorator
+    - dotenv
     - j1_template_mde

@@ -13,16 +13,16 @@
 # ------------------------------------------------------------------------------
 maintainer: Juergen Adams <juergen@jekyll-one.com>
 user: jekyllone
+push: false
 aliases:
-  latest: 3.8.4
-  stable: 3.8.4
-  3.8: 3.8.4
-  3: 3.8.4
+  latest: 3.8.5
+  stable: 3.8.5
+  3.8: 3.8.5
+  3: 3.8.5
 tags:
-  3.8.4: stable
-  3.8.4: stable
+  3.8.5: stable
+  3.8.5: stable
 releases:
   tag:
-    app: 3.8.4
-    dev: 3.8.4
-
+    app: 3.8.5
+    dev: 3.8.5

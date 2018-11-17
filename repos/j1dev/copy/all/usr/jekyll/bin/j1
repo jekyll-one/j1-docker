@@ -26,23 +26,40 @@ cmd_args=("${args[@]:1}")
 [ "$DEBUG" = "true" ] && echo "j1 cmd_args:   ${cmd_args[@]}"
 [ "$DEBUG" = "true" ] && echo "j1 default-args: ${args[@]}"
 
-# The assumption here is that if we aren't ID 0 then
-# something we wrapped, recalled us, so we need to ship
-# them to the right spot.  This can happen in one
-# scenario (when you do `jekyll new`.)
+# Detect, based on the arg list, what binary or script is
+# to be executed
 # ------------------------------------------------------------------------------
-#if [ "$(id -u)" != "0" ]; then
-#  exec $BUNDLE_BIN/jekyll "$@"
-#fi
+if [[ ${args[@]} =~ generate ]]; then
+  if [[ ${args[@]} =~ skip-bundle ]]; then
+    exe="${GEM_BIN}/j1 ${args[@]}"
+  else
+    exe="${GEM_BIN}/j1 ${args[@]} --skip-bundle"
+  fi
+elif [[ ${args[@]} =~ fsp ]]; then
+  exe="${LOCAL_BIN}/j1fsp.sh ${cmd_args[@]}"
+else
+  exe=$BUNDLE_BIN/jekyll
+fi
 
+# If the user id detected is NOT root (ID 0) this call of the
+# script is run by something wrapped or recalled. In such case,
+# it is needed to ship this run-time to the right spot. This
+# can happen in a scenario if jekyll is called like `jekyll new`
+# to create a new site.
+# ------------------------------------------------------------------------------
+if [ "$(id -u)" != "0" ] && [[ ${exe} =~ jekyll ]]; then
+  exec $BUNDLE_BIN/jekyll "$@"
+fi
+
+# Set the correct ownership for the run-time environment
 # ------------------------------------------------------------------------------
 [ -d ".cache" ] && chown -R jekyll:jekyll .cache
 [ -d ".jekyll-cache" ] && chown -R jekyll:jekyll .jekyll-cache
 [ -d ".sass-cache" ] && chown -R jekyll:jekyll .sass-cache
 [ -d "_site" ] && chown -R jekyll:jekyll _site
 
-# Install RubyGems if a Gemfile is found AND
-# the network status is detected as CONNECTED (to the Internet)
+# Install RubyGems if a Gemfile is found AND the network status
+# is detected as CONNECTED (to the Internet)
 # ------------------------------------------------------------------------------
 if [ -f "Gemfile" ] && connected; then
   bundle install
@@ -51,23 +68,11 @@ fi
 echo "$(ruby --version)"
 sup_args=""
 
-if [[ ${args[@]} =~ generate ]]; then
-  if [[ ${args[@]} =~ skip-bundle ]]; then
-    exe="/usr/local/bundle/bin/j1 ${args[@]}"
-  else
-    exe="/usr/local/bundle/bin/j1 ${args[@]} --skip-bundle"
-  fi
-elif [[ ${args[@]} =~ fsp ]]; then
-  exe="/usr/local/bin/j1fsp.sh ${cmd_args[@]}"
-else
-  exe=$BUNDLE_BIN/jekyll
-fi
-
-[ "$DEBUG" = "true" ] && echo "exe: ${exe}"
-
+# Run the final command and arg list
+# ------------------------------------------------------------------------------
 if [[ ${exe} =~ jekyll ]]; then
-  [ -x "$exe" ] && exec su-exec jekyll bundle exec ruby $sup_args $exe $args
+  #[ -x "$exe" ] && exec su-exec jekyll bundle exec ruby $sup_args $exe $args
+  [ -x "$exe" ] && exec su-exec jekyll bundle exec $exe ${args[@]}
 else
   ${exe}
 fi
-

@@ -1,8 +1,0 @@
-Installing eventmachine 1.2.7 with native extensions
-Installing http_parser.rb 0.6.0 with native extensions
-Installing fast_blank 1.0.0 with native extensions
-Installing ffi 1.9.25 with native extensions
-
-j1_template_mde 2018.4.2
-
-

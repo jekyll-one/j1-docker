@@ -44,6 +44,7 @@ ENV JEKYLL_DOCKER_NAME=<%= @meta.name %>
 ENV JEKYLL_DATA_DIR=/srv/jekyll
 ENV JEKYLL_BIN=/usr/jekyll/bin
 ENV JEKYLL_ENV=development
+ENV LOCAL_BIN=/usr/local/bin
 
 # System Environment
 # ------------------------------------------------------------------------------
@@ -166,7 +167,7 @@ RUN rm -rf $GEM_HOME/cache
 
 # RUN - Application startup
 # ------------------------------------------------------------------------------
-CMD ["jekyll", "--help"]
+CMD ["j1", "--help"]
 ENTRYPOINT ["/usr/jekyll/bin/entrypoint"]
 WORKDIR /srv/jekyll
 VOLUME  /srv/jekyll

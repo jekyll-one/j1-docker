@@ -17,9 +17,10 @@ https://docs.docker.com/engine/reference/commandline/login/#credentials-store
 === j1
 
 docker run --rm \
+  --name starter \
   --volume=$PWD:/srv/jekyll \
   -p 35729:35729 -p 40000:40000 \
-  -it jekyllone/j1:latest \
+  -it jekyllone/j1dev:latest \
   j1 serve --incremental --livereload
 
 
@@ -206,17 +207,17 @@ docker run --rm \
   --hostname starter_web \
   --volume=$PWD:/srv/jekyll \
   -p 35729:35729 -p 40000:40000 \
-  -it jekyllone/starter_web:latest \
+  -it jekyllone/j1:latest \
   j1 serve --incremental --livereload
 
 
 == Create a J1 Web from a container
 
 docker run --rm \
-  --user $(id -u $(whoami)) \
   --volume=$PWD:/srv/jekyll \
-  -i jekyllone/j1 \
-  j1 generate starter --skip-bundle
+  --env DEBUG=true \
+  -i jekyllone/j1:latest \
+  j1 generate bla --skip-bundle
 
 
 == Run a perf test on a container
@@ -255,4 +256,85 @@ docker container ls -a | grep "^<none>" | awk "{print $3}"
 docker image rm --force $(docker image ls -a | grep "^<none>" | awk "{print $3}")
 
 docker container rm --force $(docker container ls -a | grep "^<none>" | awk "{print $3}")
-docker image rm --force $(docker image ls -a | grep "^jekyllone/j1dev" | awk "{print $3}")
+docker image rm --force $(docker image ls -a | grep "^jekyllone" | awk "{print $3}")
+
+
+
+
+
+
+
+
+
+
+
+Run a perf test
+---------------
+
+docker run --rm \
+  --volume=$PWD:/srv/jekyll \
+  -it jekyllone/j1dev:latest \
+  j1 fsp c 100
+
+
+
+Create a site
+-------------
+
+docker run --rm \
+  --volume=$PWD:/srv/jekyll \
+  -it jekyllone/j1dev:latest \
+  j1 generate starter
+
+
+Build the site
+--------------
+
+cd starter
+
+docker run \
+  --name build_starter \
+  --volume=$PWD:/srv/jekyll \
+  -it jekyllone/j1dev:latest \
+  j1 build
+
+  --> docker container ls -a
+
+
+Create a new image
+------------------
+
+docker commit build_starter jekyllone/j1:latest
+
+--> docker image ls -a
+
+
+Run the site based on the new image
+-----------------------------------
+
+docker run --rm \
+  --name starter \
+  --hostname starter_web \
+  --volume=$PWD:/srv/jekyll \
+  -p 35729:35729 -p 40000:40000 \
+  -it jekyllone/j1:latest \
+  j1 serve --incremental --livereload
+
+
+Run a container interactively
+-----------------------------
+
+docker run --rm \
+  --name starter \
+  --hostname starter_web \
+  --volume=$PWD:/srv/jekyll \
+  -it jekyllone/j1:latest \
+  bash
+
+  Run a perf test
+  ---------------
+
+  docker run --rm \
+    --volume=$PWD:/srv/jekyll \
+    -it jekyllone/j1:latest \
+    j1 fsp -c 100

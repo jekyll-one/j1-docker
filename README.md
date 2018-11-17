@@ -26,7 +26,7 @@ docker run --rm \
   --volume=$PWD:/srv/jekyll \
   -p 35729:35729 -p 40000:40000 \
   -it jekyllone/j1dev:latest \
-  jekyll serve --incremental
+  j1 serve --incremental
 ```
 
 
@@ -63,7 +63,7 @@ docker run --rm \
   --volume=$PWD:/srv/jekyll \
   -p 35729:35729 -p 40000:40000 \
   -it jekyllone/j1dev:latest \
-  jekyll serve --incremental --livereload
+  j1 serve --incremental --livereload
 ```
 
 ## Build Images
@@ -85,7 +85,7 @@ It's simple like that to build images!
 Example:
 
 ```sh
-bundle exec docker-template build j1dev:3.8 --no-push
+bundle exec docker-template build j1dev:latest --no-push
 ```
 
 ### Reset a Build
@@ -109,6 +109,9 @@ run:
 docker rm $(docker images ls -a | grep "^<none>" | awk "{print $3}")
 ```
 
+```sh
+docker image ls -a | grep -v "^<none>"
+```
 
 ## Explore an Image
 
@@ -127,14 +130,16 @@ docker run --rm \
 This will print you all untagged images
 
 ```sh
-docker images ls -a | grep "^<none>" | awk "{print $3}"
+docker image ls -a | grep "^<none>" | awk "{print $3}"
+docker image ls -a | grep "^<none>" | sed 's/  */ /g' | cut -d" " -f 3
 ```
 
 This filtering also works for dangling volumes. To remove all those images
 run:
 
 ```sh
-docker rm $(docker images ls -a | grep "^<none>" | awk "{print $3}")
+docker image rm --force $(docker image ls -a | grep "^<none>" | awk "{print $3}") --force
+docker image rm --force $(docker image ls -a | grep "^<none>" | sed 's/  */ /g' | cut -d" " -f 3)
 ```
 
 
@@ -148,5 +153,15 @@ docker run --rm \
   --name j1_develop \
   --hostname j1_develop \
   --volume=$PWD:/srv/jekyll \
-  -it jekyllone/j1dev:3.8 bash
+  -it jekyllone/j1dev:latest bash
 ```
+
+docker images --format '{{.Size}}\t{{.Repository}}:{{.Tag}}\t{{.ID}}' | sort -r | column -t
+
+
+== What are docker none-none images?
+
+See: https://www.projectatomic.io/blog/2015/07/what-are-docker-none-none-images/
+See: https://github.com/justone/dockviz
+
+docker image ls -f dangling=true -q
