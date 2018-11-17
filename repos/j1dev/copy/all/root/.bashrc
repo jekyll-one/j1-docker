@@ -32,6 +32,16 @@ alias C='reset ; stty sane ;'
 # -------------------------------------
 alias fsp=_fsp
 
+alias gs='git status '
+alias ga='git add '
+alias gb='git branch '
+alias gc='git commit'
+alias gd='git diff'
+alias gh='git hist'
+alias go='git checkout '
+alias gk='gitk --all&'
+alias gx='gitx --all'
+
 # -------------------------------------
 #   ENVIRONMENT
 # -------------------------------------
@@ -47,19 +57,19 @@ export PS1="\u@\h:\W> "
 # ------------------------------------------------------------------------------
 
 function _shared()  {
-  if [[ -d /c/Users/Public ]]; then 
+  if [[ -d /c/Users/Public ]]; then
     cd /c/Users/Public
-  elif [[ -d /srv/jekyll ]]; then 
-    cd /srv/jekyll 
-  else 
+  elif [[ -d /srv/jekyll ]]; then
+    cd /srv/jekyll
+  else
     :
   fi
 }
 
-function _fsp() {                                                  
+function _fsp() {
 local fsp=$(find /usr/local/bin -name j1fsp.sh)
-                                               
-  if [[ -x ${fsp} ]]; then                       
-    ${fsp} "$@"                                  
-  fi                                                                                   
-}                                              
+
+  if [[ -x ${fsp} ]]; then
+    ${fsp} "$@"
+  fi
+}

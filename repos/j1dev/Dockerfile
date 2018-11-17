@@ -14,19 +14,19 @@
 #
 # ------------------------------------------------------------------------------
 
-# Ruby Base image (Alpine Linux)
+# BASE - Define base image Ruby|Alpine Linux
 # ------------------------------------------------------------------------------
 FROM ruby:alpine3.7
 
-# Author
+# SET - Author information
 # ------------------------------------------------------------------------------
 LABEL maintainer "Juergen Adams <juergen@jekyll-one.com>"
 
-# Place HELPER
+# COPY - Wrapper and helper scripts
 # ------------------------------------------------------------------------------
 COPY copy /
 
-# RUBY Environment
+# RUBY - Environment
 # ------------------------------------------------------------------------------
 ENV BUNDLE_HOME=/usr/local/bundle
 ENV BUNDLE_APP_CONFIG=/usr/local/bundle
@@ -34,7 +34,7 @@ ENV BUNDLE_BIN=/usr/local/bundle/bin
 ENV GEM_BIN=/usr/gem/bin
 ENV GEM_HOME=/usr/gem
 
-# IMAGE Environment
+# IMAGE - Environment
 # ------------------------------------------------------------------------------
 ENV JEKYLL_VAR_DIR=/var/jekyll
 ENV JEKYLL_DOCKER_TAG=<%= @meta.tag %>
@@ -46,7 +46,7 @@ ENV JEKYLL_BIN=/usr/jekyll/bin
 ENV JEKYLL_ENV=development
 ENV LOCAL_BIN=/usr/local/bin
 
-# System Environment
+# SYSTEM - Environment
 # ------------------------------------------------------------------------------
 ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US:en
@@ -56,57 +56,68 @@ ENV LC_ALL=en_US.UTF-8
 ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US
 
-# USER Environment
+# MAIN - Environment
 # ------------------------------------------------------------------------------
-<% if @meta.env? %>
-  ENV <%= @meta.env %>
-<% end %>
+ENV VERBOSE=false
+ENV FORCE_POLLING=false
+ENV DRAFTS=false
+ENV J1DOCKER=true
 
-# MAIN Environment
+# USER - Environment
 # ------------------------------------------------------------------------------
-env VERBOSE=false
-env FORCE_POLLING=false
-env DRAFTS=false
 
-# USER Packages
+# USER - Packages
 # ------------------------------------------------------------------------------
 <% if @meta.packages? %>
   RUN apk --no-cache add <%= @meta.packages %>
 <% end %>
 
-# DEV libraries
+# DEV - Libraries
 # ------------------------------------------------------------------------------
 RUN apk --no-cache add \
   zlib-dev \
-  build-base \
   libxml2-dev \
   libxslt-dev \
   readline-dev \
   libffi-dev \
-  yaml-dev \
+  yaml-dev
+
+# DEV - Applications
+# ------------------------------------------------------------------------------
+RUN apk --no-cache add \
+  build-base \
   cmake
 
-# MAIN libraries
+# MAIN - Libraries
 # ------------------------------------------------------------------------------
 RUN apk --no-cache add \
   linux-headers \
-  less \
   zlib \
   libxml2 \
-  readline \
   libxslt \
   libffi \
-  git \
-  nodejs \
+  libressl
+
+# MAIN - Applications
+# ------------------------------------------------------------------------------
+RUN apk --no-cache add \
+  mc \
+  bash \
+  less \
+  readline \
   tzdata \
   shadow \
-  bash \
   su-exec \
-  nodejs-npm \
-  libressl \
-  yarn
+  git
 
-# PYTHON Package
+# LANGUAGE - NodeJS
+# ------------------------------------------------------------------------------
+RUN apk --no-cache add \
+nodejs \
+nodejs-npm \
+yarn
+
+# LANGUAGE - Python
 # ------------------------------------------------------------------------------
 RUN apk add --update \
     python \
@@ -121,11 +132,11 @@ RUN apk add --update \
 # ------------------------------------------------------------------------------
 RUN echo "gem: --no-ri --no-rdoc" > ~/.gemrc
 
-# RUBY GEMs - UPDATE
+# RUBYGEM - Update
 # ------------------------------------------------------------------------------
 RUN yes | gem update --system
 
-# RUBY GEMs - MAIN
+# RUBYGEM - Main
 # ------------------------------------------------------------------------------
 # Prevent vendored bundles to fail.
 # See: https://github.com/rubygems/rubygems/issues/2062
@@ -134,7 +145,7 @@ RUN gem install jekyll -v<%= @meta.release?? \
   @meta.release : @meta.tag %> -- \
   --use-system-libraries
 
-# RUBY GEMs - USER
+# RUBYGEM user
 # ------------------------------------------------------------------------------
 <% if @meta.gems? %>
   # Use system-libraries for all RubyGem to speedup slow builts of Rubies
@@ -143,14 +154,14 @@ RUN gem install jekyll -v<%= @meta.release?? \
     --use-system-libraries
 <% end %>
 
-# SYSTEM - Set user and group
+# SETUP - Set user and group
 # ------------------------------------------------------------------------------
 RUN addgroup -Sg 1000 jekyll
 RUN adduser  -Su 1000 -G jekyll jekyll
 RUN addgroup -Sg 5555 cifs
 RUN usermod  -aG cifs jekyll
 
-# PREPARE - CREATE Application folders
+# SETUP - CREATE Application folders
 # ------------------------------------------------------------------------------
 RUN mkdir -p $JEKYLL_VAR_DIR
 RUN mkdir -p $JEKYLL_DATA_DIR
@@ -158,7 +169,7 @@ RUN chown -R jekyll:jekyll $JEKYLL_DATA_DIR
 RUN chown -R jekyll:jekyll $JEKYLL_VAR_DIR
 RUN chown -R jekyll:jekyll $BUNDLE_HOME
 
-# PREPARE - CLEAN Application folders
+# SETUP - CLEAN Application folders
 # ------------------------------------------------------------------------------
 RUN rm -rf /root/.gem
 RUN rm -rf /home/jekyll/.gem

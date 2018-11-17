@@ -259,33 +259,13 @@ docker container rm --force $(docker container ls -a | grep "^<none>" | awk "{pr
 docker image rm --force $(docker image ls -a | grep "^jekyllone" | awk "{print $3}")
 
 
-
-
-
-
-
-
-
-
-
-Run a perf test
----------------
-
-docker run --rm \
-  --volume=$PWD:/srv/jekyll \
-  -it jekyllone/j1dev:latest \
-  j1 fsp c 100
-
-
-
-Create a site
--------------
+Create a starter web
+--------------------
 
 docker run --rm \
   --volume=$PWD:/srv/jekyll \
   -it jekyllone/j1dev:latest \
   j1 generate starter
-
 
 Build the site
 --------------
@@ -304,7 +284,7 @@ docker run \
 Create a new image
 ------------------
 
-docker commit build_starter jekyllone/j1:latest
+docker commit build_starter jekyllone/j1runtime:latest
 
 --> docker image ls -a
 
@@ -312,12 +292,14 @@ docker commit build_starter jekyllone/j1:latest
 Run the site based on the new image
 -----------------------------------
 
+cd starter
+
 docker run --rm \
   --name starter \
   --hostname starter_web \
   --volume=$PWD:/srv/jekyll \
   -p 35729:35729 -p 40000:40000 \
-  -it jekyllone/j1:latest \
+  -it jekyllone/j1runtime:latest \
   j1 serve --incremental --livereload
 
 
@@ -328,13 +310,31 @@ docker run --rm \
   --name starter \
   --hostname starter_web \
   --volume=$PWD:/srv/jekyll \
-  -it jekyllone/j1:latest \
+  -it jekyllone/j1dev:latest \
   bash
 
-  Run a perf test
-  ---------------
+Run a perf test
+---------------
 
-  docker run --rm \
-    --volume=$PWD:/srv/jekyll \
-    -it jekyllone/j1:latest \
-    j1 fsp -c 100
+docker run --rm \
+  --volume=$PWD:/srv/jekyll \
+  -it jekyllone/j1:latest \
+  j1 fsp -c 100
+
+
+
+
+== Development system
+
+
+=== Run the site
+
+docker run \
+  --name developer \
+  --hostname developer \
+  --volume=$PWD:/srv/jekyll \
+  -p 35729:35729 -p 41000:41000 \
+  -it jekyllone/j1runtime:latest \
+  yarn site
+
+  docker commit developer jekyllone/j1develop:latest
