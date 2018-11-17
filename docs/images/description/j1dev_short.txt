@@ -1,0 +1,2 @@
+Docker Image to manage all development and run-time processes for static Webs
+based on J1 Template

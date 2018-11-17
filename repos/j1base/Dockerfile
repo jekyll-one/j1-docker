@@ -1,5 +1,5 @@
 # ------------------------------------------------------------------------------
-# ~/repos/dev/Dockerfile
+# ~/repos/j1base/Dockerfile
 # J1 Docker Development Image based on Alpine Linux (https://alpinelinux.org/)
 #
 # Product/Info:

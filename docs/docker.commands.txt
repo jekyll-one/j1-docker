@@ -20,7 +20,7 @@ docker run --rm \
   --name starter \
   --volume=$PWD:/srv/jekyll \
   -p 35729:35729 -p 40000:40000 \
-  -it jekyllone/j1dev:latest \
+  -it jekyllone/j1base:latest \
   j1 serve --incremental --livereload
 
 
@@ -34,18 +34,18 @@ docker run --rm \
   j1 serve --incremental --livereload
 
 
-# Docker Image jekyllone/j1dev:latest
+# Docker Image jekyllone/j1base:latest
 --------------------------------------------------------------------------------
 
 docker run --rm \
   --volume=$PWD:/srv/jekyll \
   -p 35729:35729 -p 40000:40000 \
-  -it jekyllone/j1dev:latest \
+  -it jekyllone/j1base:latest \
   j1 serve --incremental --livereload
 
 $ docker container ls
 CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                                              NAMES
-725e3a04ba74        jekyllone/j1dev:latest   "/usr/jekyll/bin/ent…"   3 minutes ago       Up 3 minutes        0.0.0.0:35729->35729/tcp, 0.0.0.0:40000->40000/tcp   silly_bell
+725e3a04ba74        jekyllone/j1base:latest   "/usr/jekyll/bin/ent…"   3 minutes ago       Up 3 minutes        0.0.0.0:35729->35729/tcp, 0.0.0.0:40000->40000/tcp   silly_bell
 
 
 $ docker commit CONTAINER_NAME jekyllone/j1:latest
@@ -63,13 +63,13 @@ b86bef54ad8e        j1/j1-docker:inital   "/usr/jekyll/bin/ent…"   About an ho
 $ docker image ls
 REPOSITORY            TAG                 IMAGE ID            CREATED             SIZE
 jekyllone/j1        latest              8219f571b304        6 seconds ago       656MB
-jekyllone/j1dev     3.8.4               b948b8721692        11 minutes ago      374MB
-jekyllone/j1dev     latest              b948b8721692        11 minutes ago      374MB
+jekyllone/j1base     3.8.4               b948b8721692        11 minutes ago      374MB
+jekyllone/j1base     latest              b948b8721692        11 minutes ago      374MB
 
 docker run --rm \
   --volume=$PWD:/srv/jekyll \
   -p 35729:35729 -p 40000:40000 \
-  -it jekyllone/j1dev:latest \
+  -it jekyllone/j1base:latest \
   j1 serve --incremental --livereload
 
 
@@ -78,7 +78,7 @@ docker run --rm \
   --hostname starter_web \
   --volume=$PWD:/srv/jekyll \
   -p 35729:35729 -p 40000:40000 \
-  -it jekyllone/j1dev:latest \
+  -it jekyllone/j1base:latest \
   j1 serve --incremental --livereload
 
 
@@ -187,7 +187,7 @@ docker run --rm \
   --name starter \
   --hostname starter_web \
   --volume=$PWD:/srv/jekyll \
-  -it jekyllone/j1dev:latest bash
+  -it jekyllone/j1base:latest bash
 
 docker run --rm \
   --name starter \
@@ -264,7 +264,7 @@ Create a starter web
 
 docker run --rm \
   --volume=$PWD:/srv/jekyll \
-  -it jekyllone/j1dev:latest \
+  -it jekyllone/j1base:latest \
   j1 generate starter
 
 Build the site
@@ -275,7 +275,7 @@ cd starter
 docker run \
   --name build_starter \
   --volume=$PWD:/srv/jekyll \
-  -it jekyllone/j1dev:latest \
+  -it jekyllone/j1base:latest \
   j1 build
 
   --> docker container ls -a
@@ -284,7 +284,7 @@ docker run \
 Create a new image
 ------------------
 
-docker commit build_starter jekyllone/j1runtime:latest
+docker commit starter jekyllone/j1dev:latest
 
 --> docker image ls -a
 
@@ -299,7 +299,7 @@ docker run --rm \
   --hostname starter_web \
   --volume=$PWD:/srv/jekyll \
   -p 35729:35729 -p 40000:40000 \
-  -it jekyllone/j1runtime:latest \
+  -it jekyllone/j1dev:latest \
   j1 serve --incremental --livereload
 
 
@@ -307,19 +307,30 @@ Run a container interactively
 -----------------------------
 
 docker run --rm \
-  --name starter \
-  --hostname starter_web \
+  --name j1base \
+  --hostname j1base \
   --volume=$PWD:/srv/jekyll \
-  -it jekyllone/j1dev:latest \
+  -it jekyllone/j1base:latest \
   bash
+
+Explore a container interactively
+---------------------------------
+
+docker run --rm \
+  --name j1base \
+  --hostname j1base \
+  --volume=$PWD:/srv/jekyll \
+  -it jekyllone/j1base:latest \
+  mc
+
 
 Run a perf test
 ---------------
 
 docker run --rm \
   --volume=$PWD:/srv/jekyll \
-  -it jekyllone/j1:latest \
-  j1 fsp -c 100
+  -it jekyllone/j1base:latest \
+  j1 fsp
 
 
 
@@ -329,12 +340,10 @@ docker run --rm \
 
 === Run the site
 
-docker run \
-  --name developer \
-  --hostname developer \
+docker run --rm \
+  --name develop \
+  --hostname j1develop \
   --volume=$PWD:/srv/jekyll \
   -p 35729:35729 -p 41000:41000 \
-  -it jekyllone/j1runtime:latest \
+  -it jekyllone/j1dev:latest \
   yarn site
-
-  docker commit developer jekyllone/j1develop:latest

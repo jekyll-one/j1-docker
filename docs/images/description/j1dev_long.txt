@@ -1,0 +1,4 @@
+**j1base** is a Docker image to manage all development and run-time processes
+for static web sites based on **Jekyll** or **J1 Template**. The image contains - beside the RubyGems Jekyll and J1 Template - all development dependencies like Git and the languages Ruby, Python and NodeJS ready to use.
+
+For more details on how to **create** and **use** the image, see the [README](https://github.com/jekyll-one/j1docker/blob/master/README.md) on Github.
